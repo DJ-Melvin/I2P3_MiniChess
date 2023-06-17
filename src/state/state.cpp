@@ -11,11 +11,80 @@
  * 
  * @return int 
  */
-int State::evaluate(){
-  // [TODO] design your own evaluation function
-  return 0;
+int State::PieceScore(int score, bool player) {
+  if(!player) {
+    for(int i = 0; i < BOARD_H; i++) {
+      for(int j = 0; j < BOARD_W; j++) {
+        if(this->board.board[0][i][j] == 1) { // pawn
+          score += 100;
+        } else if(this->board.board[0][i][j] == 2) { // rook
+          score += 525;
+        } else if(this->board.board[0][i][j] == 3) { // knight
+          score += 350;
+        } else if(this->board.board[0][i][j] == 4) { // bishop
+          score += 350;
+        } else if(this->board.board[0][i][j] == 5) { // queen
+          score += 1000;
+        } else if(this->board.board[0][i][j] == 6) { // king
+          score += 10000;
+        } else if(this->board.board[1][i][j] == 1) { // pawn
+          score -= 100;
+        } else if(this->board.board[1][i][j] == 2) { // rook
+          score -= 350;
+        } else if(this->board.board[1][i][j] == 3) { // knight
+          score -= 350;
+        } else if(this->board.board[1][i][j] == 4) { // bishop
+          score -= 525;
+        } else if(this->board.board[1][i][j] == 5) { // queen
+          score -= 1000;
+        } else if(this->board.board[1][i][j] == 6) { // king
+          score -= 10000;
+        }
+      }
+    }
+  } else {
+    for(int i = 0; i < BOARD_H; i++) {
+      for(int j = 0; j < BOARD_W; j++) {
+        if(this->board.board[0][i][j] == 1) { // pawn
+          score -= 100;
+        } else if(this->board.board[0][i][j] == 2) { // rook
+          score -= 525;
+        } else if(this->board.board[0][i][j] == 3) { // knight
+          score -= 350;
+        } else if(this->board.board[0][i][j] == 4) { // bishop
+          score -= 350;
+        } else if(this->board.board[0][i][j] == 5) { // queen
+          score -= 1000;
+        } else if(this->board.board[0][i][j] == 6) { // king
+          score -= 10000;
+        } else if(this->board.board[1][i][j] == 1) { // pawn
+          score += 100;
+        } else if(this->board.board[1][i][j] == 2) { // rook
+          score += 350;
+        } else if(this->board.board[1][i][j] == 3) { // knight
+          score += 350;
+        } else if(this->board.board[1][i][j] == 4) { // bishop
+          score += 525;
+        } else if(this->board.board[1][i][j] == 5) { // queen
+          score += 1000;
+        } else if(this->board.board[1][i][j] == 6) { // king
+          score += 10000;
+        }
+      }
+    }
+  }
+  return score;
 }
-
+int State::PositionScore(int score, bool player) {
+  return score;
+}
+int State::evaluate(bool player){
+  // [TODO] design your own evaluation function
+  int score = 0;
+  score += PieceScore(score, player);
+  score += PositionScore(score, player);
+  return score;
+}
 
 /**
  * @brief return next state after the move
