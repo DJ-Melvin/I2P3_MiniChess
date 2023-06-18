@@ -37,7 +37,7 @@ int Minimax::minimax(State *state, int depth, bool maximizingPlayer){
     if (maximizingPlayer)
     {
         int value = -100000;
-        for (int i = 0; i < state->legal_actions.size(); i++)
+        for (int i = 0; i < (int)state->legal_actions.size(); i++)
         {
             State *child = state->next_state(state->legal_actions[i]);
             value = std::max(value, minimax(child, depth - 1, false));
@@ -48,7 +48,7 @@ int Minimax::minimax(State *state, int depth, bool maximizingPlayer){
     else
     {
         int value = 100000;
-        for (int i = 0; i < state->legal_actions.size(); i++)
+        for (int i = 0; i < (int)state->legal_actions.size(); i++)
         {
             State *child = state->next_state(state->legal_actions[i]);
             value = std::min(value, minimax(child, depth - 1, true));
@@ -65,7 +65,7 @@ Move Minimax::get_move(State *state, int depth)
     Move best_move;
     if (!state->legal_actions.empty())
         best_move = state->legal_actions[0];
-    for (int i = 0; i < state->legal_actions.size(); i++)
+    for (int i = 0; i < (int)state->legal_actions.size(); i++)
     {
         State *child = state->next_state(state->legal_actions[i]);
         int new_value;
