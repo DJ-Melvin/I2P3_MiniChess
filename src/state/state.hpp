@@ -53,9 +53,9 @@ class State{
     State(Board board): board(board){};
     State(Board board, int player): board(board), player(player){};
     
-    int PieceScore(int score, bool player);
-    int PositionScore(int score, bool player);
-    int evaluate(bool player);
+    int PieceScore(int score);
+    int PositionScore(int score);
+    int evaluate();
     State* next_state(Move move);
     void get_legal_actions();
     std::string encode_output();

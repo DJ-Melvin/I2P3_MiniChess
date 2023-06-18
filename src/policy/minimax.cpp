@@ -3,6 +3,7 @@
 #include "../state/state.hpp"
 #include "./minimax.hpp"
 
+int current_player;
 /*
 function minimax(node, depth, maximizingPlayer) is
     if depth = 0 or node is a terminal node then
@@ -18,43 +19,63 @@ function minimax(node, depth, maximizingPlayer) is
             value := min(value, minimax(child, depth − 1, TRUE))
         return value
 */
-int Minimax::minimax(State* state, int depth, bool maximizingPlayer) {
-  if(depth == 0 || state->game_state != UNKNOWN) {
-    return state->evaluate(maximizingPlayer);
-  }
-  if(maximizingPlayer) {
-    int value = -100000;
-    for(int i = 0; i < state->legal_actions.size(); i++) {
-      State* child = state->next_state(state->legal_actions[i]);
-      value = std::max(value, minimax(child, depth - 1, !maximizingPlayer));
-      delete child;
+int Minimax::minimax(State *state, int depth, bool maximizingPlayer){
+    if (state->game_state == WIN) {
+        if (state->player == current_player)
+            return 100000;
+        else
+            return -100000;
     }
-    return value;
-  } else {
-    int value = 100000;
-    for(int i = 0; i < state->legal_actions.size(); i++) {
-      State* child = state->next_state(state->legal_actions[i]);
-      value = std::min(value, minimax(child, depth - 1, !maximizingPlayer));
-      delete child;
+    if (depth == 0)
+    {
+        if (current_player == state->player)
+            return state->evaluate();
+        else
+            return -(state->evaluate());
+        // return state->evaluate();
     }
-    return value;
-  }
+    if (maximizingPlayer)
+    {
+        int value = -100000;
+        for (int i = 0; i < state->legal_actions.size(); i++)
+        {
+            State *child = state->next_state(state->legal_actions[i]);
+            value = std::max(value, minimax(child, depth - 1, false));
+            delete child;
+        }
+        return value;
+    }
+    else
+    {
+        int value = 100000;
+        for (int i = 0; i < state->legal_actions.size(); i++)
+        {
+            State *child = state->next_state(state->legal_actions[i]);
+            value = std::min(value, minimax(child, depth - 1, true));
+            delete child;
+        }
+        return value;
+    }
 }
 
-Move Minimax::get_move(State* state, int depth) {
-  int value = -100000;
-  Move best_move;
-  if(!state->legal_actions.empty()) best_move = state->legal_actions[0];
-  for(int i = 0; i < state->legal_actions.size(); i++) {
-    State* child = state->next_state(state->legal_actions[i]);
-    int new_value;
-    if(state->player == 0) new_value = minimax(child, depth - 1, false);
-    else if(state->player == 1) new_value = minimax(child, depth - 1, true);
-    if(new_value > value) {
-      value = new_value;
-      best_move = state->legal_actions[i];
+Move Minimax::get_move(State *state, int depth)
+{
+    int value = -100000;
+    current_player = state->player;
+    Move best_move;
+    if (!state->legal_actions.empty())
+        best_move = state->legal_actions[0];
+    for (int i = 0; i < state->legal_actions.size(); i++)
+    {
+        State *child = state->next_state(state->legal_actions[i]);
+        int new_value;
+        new_value = minimax(child, depth - 1, false);
+        if (new_value > value)
+        {
+            value = new_value;
+            best_move = state->legal_actions[i];
+        }
+        delete child;
     }
-    delete child;
-  }
-  return best_move;
+    return best_move;
 }
