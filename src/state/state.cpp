@@ -59,6 +59,14 @@ int pst_king[30] = {
   -10, 0, 0, 0, -10,
   30, 20, 10, 20, 30
 };
+int pst_king_endgame[30] = {
+  -50, -40, -30, -40, -50,
+  -30, -20, -10, -20, -30,
+  -30, 30, 20, 30, -30,
+  -30, 40, 30, 40, -30,
+  -30, 0, 0, 0, -30,
+  -30, -30, -30, -30, -30
+};
 void State::PieceScore(int* score) {
   for(int i = 0; i < BOARD_H; i++) {
     for(int j = 0; j < BOARD_W; j++) {
@@ -90,7 +98,7 @@ void State::PieceScore(int* score) {
     }
   }
 }
-void State::PositionScore(int* score) {
+void State::PositionScore(int* score, int step) {
   for(int i = 0; i < BOARD_H; i++) {
     for(int j = 0; j < BOARD_W; j++) {
       if(this->board.board[this->player][i][j] == 1) { // pawn
@@ -104,7 +112,8 @@ void State::PositionScore(int* score) {
       } else if(this->board.board[this->player][i][j] == 5) { // queen
         *score += pst_queen[i * BOARD_W + j];
       } else if(this->board.board[this->player][i][j] == 6) { // king
-        *score += pst_king[i * BOARD_W + j];
+        if(step <= 35) *score += pst_king[i * BOARD_W + j];
+        else *score += pst_king_endgame[i * BOARD_W + j];
       } else if(this->board.board[1 - this->player][i][j] == 1) { // pawn
         *score -= pst_pawn[i * BOARD_W + j];
       } else if(this->board.board[1 - this->player][i][j] == 2) { // rook
@@ -116,19 +125,24 @@ void State::PositionScore(int* score) {
       } else if(this->board.board[1 - this->player][i][j] == 5) { // queen
         *score -= pst_queen[i * BOARD_W + j];
       } else if(this->board.board[1 - this->player][i][j] == 6) { // king
-        *score -= pst_king[i * BOARD_W + j];
+        if(step <= 35) *score -= pst_king[i * BOARD_W + j];
+        else *score -= pst_king_endgame[i * BOARD_W + j];
       }
     }
   }
 }
-int State::evaluate(){
+int State::evaluate(int step){
   // [TODO] design your own evaluation function
   int score = 0;
   PieceScore(&score);
-  PositionScore(&score);
+  PositionScore(&score, step);
   return score;
 }
-
+int State::evaluate2() {
+  int score = 0;
+  PieceScore(&score);
+  return score;
+}
 /**
  * @brief return next state after the move
  * 

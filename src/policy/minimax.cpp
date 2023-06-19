@@ -29,9 +29,9 @@ int Minimax::minimax(State *state, int depth, bool maximizingPlayer){
     if (depth == 0)
     {
         if (current_player == state->player)
-            return state->evaluate();
+            return state->evaluate(0);
         else
-            return -(state->evaluate());
+            return -(state->evaluate(0));
         // return state->evaluate();
     }
     if (maximizingPlayer)
