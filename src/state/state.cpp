@@ -11,46 +11,121 @@
  * 
  * @return int 
  */
-int State::PieceScore(int score) {
+int pst_pawn[30] = {
+  0, 0, 0, 0, 0,
+  50, 50, 50, 50, 50,
+  10, 10, 20, 10, 10,
+  0, 20, 10, 20, 0,
+  5, 5, 10, 5, 5,
+  0, 0, 0, 0, 0
+};
+int pst_knight[30] = {
+  -50, -40, -30, -40, -50,
+  -40, -10, 0, -10, -40,
+  0, 10, 20, 10, 0,
+  0, 10, 20, 10, 0,
+  -40, -10, 0, -10, -40,
+  -50, -40, -30, -40, -50
+};
+int pst_bishop[30] = {
+  -20, -10, -10, -10, -20,
+  -10, 5, 0, 5, -10,
+  -10, 10, 10, 10, -10,
+  -10, 10, 10, 10, -10,
+  -10, 5, 0, 5, -10,
+  -20, -10, -10, -10, -20
+};
+int pst_rook[30] = {
+  0, 0, 0, 0, 0,
+  5, 10, 10, 10, 5,
+  -5, 0, 0, 0, -5,
+  -5, 0, 0, 0, -5,
+  -5, 0, 0, 0, -5,
+  0, 0, 5, 0, 0
+};
+int pst_queen[30] = {
+  -20, -10, -5, -10, -20,
+  -10, 0, 5, 0, -10,
+  -5, 0, 5, 0, -5,
+  0, 0, 5, 0, 0,
+  -10, 0, 5, 0, -10,
+  -20, -10, -5, -10, -20
+};
+int pst_king[30] = {
+  -30, -40, -50, -40, -30,
+  -30, -40, -50, -40, -30,
+  -30, -40, -50, -40, -30,
+  -20, -40, -50, -40, -20,
+  -10, 0, 0, 0, -10,
+  30, 20, 10, 20, 30
+};
+void State::PieceScore(int* score) {
   for(int i = 0; i < BOARD_H; i++) {
     for(int j = 0; j < BOARD_W; j++) {
       if(this->board.board[this->player][i][j] == 1) { // pawn
-        score += 100;
+        *score += 100;
       } else if(this->board.board[this->player][i][j] == 2) { // rook
-        score += 525;
+        *score += 500;
       } else if(this->board.board[this->player][i][j] == 3) { // knight
-        score += 350;
+        *score += 320;
       } else if(this->board.board[this->player][i][j] == 4) { // bishop
-        score += 350;
+        *score += 330;
       } else if(this->board.board[this->player][i][j] == 5) { // queen
-        score += 1000;
+        *score += 900;
       } else if(this->board.board[this->player][i][j] == 6) { // king
-        score += 10000;
+        *score += 20000;
       } else if(this->board.board[1 - this->player][i][j] == 1) { // pawn
-        score -= 100;
+        *score -= 100;
       } else if(this->board.board[1 - this->player][i][j] == 2) { // rook
-        score -= 350;
+        *score -= 500;
       } else if(this->board.board[1 - this->player][i][j] == 3) { // knight
-        score -= 350;
+        *score -= 320;
       } else if(this->board.board[1 - this->player][i][j] == 4) { // bishop
-        score -= 525;
+        *score -= 330;
       } else if(this->board.board[1 - this->player][i][j] == 5) { // queen
-        score -= 1000;
+        *score -= 900;
       } else if(this->board.board[1 - this->player][i][j] == 6) { // king
-        score -= 10000;
+        *score -= 20000;
       }
     }
   }
-  return score;
 }
-int State::PositionScore(int score) {
-  return 0;
+void State::PositionScore(int* score) {
+  for(int i = 0; i < BOARD_H; i++) {
+    for(int j = 0; j < BOARD_W; j++) {
+      if(this->board.board[this->player][i][j] == 1) { // pawn
+        *score += pst_pawn[i * BOARD_W + j];
+      } else if(this->board.board[this->player][i][j] == 2) { // rook
+        *score += pst_rook[i * BOARD_W + j];
+      } else if(this->board.board[this->player][i][j] == 3) { // knight
+        *score += pst_knight[i * BOARD_W + j];
+      } else if(this->board.board[this->player][i][j] == 4) { // bishop
+        *score += pst_bishop[i * BOARD_W + j];
+      } else if(this->board.board[this->player][i][j] == 5) { // queen
+        *score += pst_queen[i * BOARD_W + j];
+      } else if(this->board.board[this->player][i][j] == 6) { // king
+        *score += pst_king[i * BOARD_W + j];
+      } else if(this->board.board[1 - this->player][i][j] == 1) { // pawn
+        *score -= pst_pawn[i * BOARD_W + j];
+      } else if(this->board.board[1 - this->player][i][j] == 2) { // rook
+        *score -= pst_rook[i * BOARD_W + j];
+      } else if(this->board.board[1 - this->player][i][j] == 3) { // knight
+        *score -= pst_knight[i * BOARD_W + j];
+      } else if(this->board.board[1 - this->player][i][j] == 4) { // bishop
+        *score -= pst_bishop[i * BOARD_W + j];
+      } else if(this->board.board[1 - this->player][i][j] == 5) { // queen
+        *score -= pst_queen[i * BOARD_W + j];
+      } else if(this->board.board[1 - this->player][i][j] == 6) { // king
+        *score -= pst_king[i * BOARD_W + j];
+      }
+    }
+  }
 }
 int State::evaluate(){
   // [TODO] design your own evaluation function
   int score = 0;
-  score += PieceScore(score);
-  score += PositionScore(score);
+  PieceScore(&score);
+  PositionScore(&score);
   return score;
 }
 
