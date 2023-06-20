@@ -3,7 +3,7 @@
 
 #include "../config.hpp"
 #include "../state/state.hpp"
-#include "../policy/no_position.hpp"
+#include "../policy/alpha_beta.hpp"
 
 
 State* root;
@@ -42,7 +42,7 @@ void write_valid_spot(std::ofstream& fout) {
   // Keep updating the output until getting killed.
   while(true) {
     // Write your own policy instead
-    auto move = NoPosition::get_move(root, 7);
+    auto move = AlphaBeta::get_move(root, 7);
     fout << move.first.first << " " << move.first.second << " "\
          << move.second.first << " " << move.second.second << std::endl;
     // Remember to flush the output to ensure the last action is written to file.

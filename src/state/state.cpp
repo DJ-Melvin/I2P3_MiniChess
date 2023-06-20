@@ -138,11 +138,6 @@ int State::evaluate(int step){
   PositionScore(&score, step);
   return score;
 }
-int State::evaluate2() {
-  int score = 0;
-  PieceScore(&score);
-  return score;
-}
 /**
  * @brief return next state after the move
  * 

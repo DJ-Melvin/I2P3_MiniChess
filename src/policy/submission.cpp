@@ -1,22 +1,23 @@
 #include <cstdlib>
 
 #include "../state/state.hpp"
-#include "./no_position.hpp"
+#include "./alpha_beta.hpp"
 
-int cur_player;
+int CurrentPlayer;
+int CurrentStep = 0;
 
-int NoPosition::minimax(State *state, int depth, int alpha, int beta, bool maximizingPlayer) {
+int AlphaBeta::minimax(State *state, int depth, int alpha, int beta, bool maximizingPlayer) {
   if (state->game_state == WIN) {
-    if (state->player == cur_player)
+    if (state->player == CurrentPlayer)
       return 100000;
     else
       return -100000;
   }
   if (depth == 0) {
-    if (cur_player == state->player)
-      return state->evaluate2();
+    if (CurrentPlayer == state->player)
+      return state->evaluate(CurrentStep);
     else
-      return -(state->evaluate2());
+      return -(state->evaluate(CurrentStep));
   }
   if (maximizingPlayer) {
     int value = -100000;
@@ -48,9 +49,9 @@ int NoPosition::minimax(State *state, int depth, int alpha, int beta, bool maxim
   }
 }
 
-Move NoPosition::get_move(State *state, int depth) {
+Move AlphaBeta::get_move(State *state, int depth) {
   int value = -100000;
-  cur_player = state->player;
+  CurrentPlayer = state->player;
   Move best_move;
   if (!state->legal_actions.empty())
     best_move = state->legal_actions[0];
@@ -64,5 +65,6 @@ Move NoPosition::get_move(State *state, int depth) {
     }
     delete child;
   }
+  CurrentStep += 2;
   return best_move;
 }
